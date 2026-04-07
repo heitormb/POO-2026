@@ -3,7 +3,7 @@ class Cinema():
         self.dia = dia
         self.horario = horario
 
-    def calcular_valor(self, valor):
+    def calcular_valor(self):
         if self.dia == "segunda":
             valor = 16
         elif self.dia == "terça":
@@ -26,7 +26,8 @@ class Cinema():
 
 
 dia = input("digite o dia do filme: ")
-horario = input("digite o horário do filme: ")
+horario = int(input("digite o horário do filme: "))
 
 filme = Cinema(dia, horario)
-print
+custo = filme.calcular_valor()
+print(custo)
