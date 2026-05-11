@@ -1,380 +1,140 @@
 class PlayList:
-    def __init__(self, i: int, n: str, d: str):
-        self.__id = i
-        self.__nome = n
-        self.__descricao = d
+    def __init__(self, id, nome, descricao):
+        self.set_id(id)
+        self.set_nome(nome)
+        self.set_descricao(descricao)
 
-    def get_id(self):
-        return self.__id
-
-    def get_nome(self):
-        return self.__nome
-
-    def get_descricao(self):
-        return self.__descricao
+    def set_id(self, id):
+        if id <= 0:
+            raise ValueError("O id deve ser positivo")
+        self.id = id
 
     def set_nome(self, nome):
-        self.__nome = nome
+        if nome == "":
+            raise ValueError("O nome não pode ser vazio")
+        self.nome = nome
 
     def set_descricao(self, descricao):
-        self.__descricao = descricao
+        if descricao == "":
+            raise ValueError("A descrição não pode ser vazia")
+        self.descricao = descricao
 
-    def ToString(self):
-        return (
-            f"ID: {self.__id} | "
-            f"Nome: {self.__nome} | "
-            f"Descrição: {self.__descricao}"
-        )
+    def get_id(self):
+        return self.id
+
+    def get_nome(self):
+        return self.nome
+
+    def get_descricao(self):
+        return self.descricao
+
+    def __str__(self):
+        return f"{self.id} - {self.nome} - {self.descricao}"
 
 
 class Musica:
-    def __init__(self, i: int, t: str, art: str, alb: str):
-        self.__id = i
-        self.__titulo = t
-        self.__artista = art
-        self.__album = alb
+    def __init__(self, id, titulo, artista, album):
+        self.set_id(id)
+        self.set_titulo(titulo)
+        self.set_artista(artista)
+        self.set_album(album)
 
-    def get_id(self):
-        return self.__id
-
-    def get_titulo(self):
-        return self.__titulo
-
-    def get_artista(self):
-        return self.__artista
-
-    def get_album(self):
-        return self.__album
+    def set_id(self, id):
+        if id <= 0:
+            raise ValueError("O id deve ser positivo")
+        self.id = id
 
     def set_titulo(self, titulo):
-        self.__titulo = titulo
+        if titulo == "":
+            raise ValueError("O título não pode ser vazio")
+        self.titulo = titulo
 
     def set_artista(self, artista):
-        self.__artista = artista
+        if artista == "":
+            raise ValueError("O artista não pode ser vazio")
+        self.artista = artista
 
     def set_album(self, album):
-        self.__album = album
+        if album == "":
+            raise ValueError("O álbum não pode ser vazio")
+        self.album = album
 
-    def ToString(self):
-        return (
-            f"ID: {self.__id} | "
-            f"Título: {self.__titulo} | "
-            f"Artista: {self.__artista} | "
-            f"Álbum: {self.__album}"
-        )
+    def get_id(self):
+        return self.id
+
+    def get_titulo(self):
+        return self.titulo
+
+    def get_artista(self):
+        return self.artista
+
+    def get_album(self):
+        return self.album
+
+    def __str__(self):
+        return f"{self.id} - {self.titulo} - {self.artista} - {self.album}"
 
 
 class PlayListItem:
-    def __init__(self, i: int, ip: int, im: int, s: int):
-        self.__id = i
-        self.__idPlayList = ip
-        self.__idMusica = im
-        self.__sequencia = s
+    def __init__(self, id, idPlaylist, idMusica, sequencia):
+        self.set_id(id)
+        self.set_idPlaylist(idPlaylist)
+        self.set_idMusica(idMusica)
+        self.set_sequencia(sequencia)
 
-    def get_id(self):
-        return self.__id
+    def set_id(self, id):
+        if id <= 0:
+            raise ValueError("O id deve ser positivo")
+        self.id = id
 
-    def get_idPlayList(self):
-        return self.__idPlayList
+    def set_idPlaylist(self, idPlaylist):
+        if idPlaylist <= 0:
+            raise ValueError("O id da playlist deve ser positivo")
+        self.idPlaylist = idPlaylist
 
-    def get_idMusica(self):
-        return self.__idMusica
-
-    def get_sequencia(self):
-        return self.__sequencia
-
-    def set_idPlayList(self, idplaylist):
-        self.__idPlayList = idplaylist
-
-    def set_idMusica(self, idmusica):
-        self.__idMusica = idmusica
+    def set_idMusica(self, idMusica):
+        if idMusica <= 0:
+            raise ValueError("O id da música deve ser positivo")
+        self.idMusica = idMusica
 
     def set_sequencia(self, sequencia):
-        self.__sequencia = sequencia
+        if sequencia <= 0:
+            raise ValueError("A sequência deve ser positiva")
+        self.sequencia = sequencia
 
-    def ToString(self):
-        return (
-            f"ID Item: {self.__id} | "
-            f"Playlist ID: {self.__idPlayList} | "
-            f"Música ID: {self.__idMusica} | "
-            f"Sequência: {self.__sequencia}"
-        )
+    def get_id(self):
+        return self.id
+
+    def get_idPlaylist(self):
+        return self.idPlaylist
+
+    def get_idMusica(self):
+        return self.idMusica
+
+    def get_sequencia(self):
+        return self.sequencia
+
+    def __str__(self):
+        return f"{self.id} - {self.idPlaylist} - {self.idMusica} - {self.sequencia}"
 
 
 class UI:
-
-    playlists = []
-    musicas = []
-    itens = []
-
-
-    @staticmethod
-    def inserir_playlist():
-        print("\n=== INSERIR PLAYLIST ===")
-
-        id_playlist = int(input("ID da playlist: "))
-        nome = input("Nome da playlist: ")
-        descricao = input("Descrição: ")
-
-        playlist = PlayList(id_playlist, nome, descricao)
-        UI.playlists.append(playlist)
-
-        print("Playlist cadastrada com sucesso!")
-
-    @staticmethod
-    def listar_playlists():
-        print("\n=== LISTA DE PLAYLISTS ===")
-
-        if len(UI.playlists) == 0:
-            print("Nenhuma playlist cadastrada.")
-            return
-
-        for p in UI.playlists:
-            print(p.ToString())
-
-    @staticmethod
-    def atualizar_playlist():
-        print("\n=== ATUALIZAR PLAYLIST ===")
-
-        id_playlist = int(input("Informe o ID da playlist: "))
-
-        for p in UI.playlists:
-            if p.get_id() == id_playlist:
-
-                novo_nome = input("Novo nome: ")
-                nova_descricao = input("Nova descrição: ")
-
-                p.set_nome(novo_nome)
-                p.set_descricao(nova_descricao)
-
-                print("Playlist atualizada!")
-                return
-
-        print("Playlist não encontrada.")
-
-    @staticmethod
-    def excluir_playlist():
-        print("\n=== EXCLUIR PLAYLIST ===")
-
-        id_playlist = int(input("Informe o ID da playlist: "))
-
-        for p in UI.playlists:
-            if p.get_id() == id_playlist:
-
-                UI.itens = [
-                    i for i in UI.itens
-                    if i.get_idPlayList() != id_playlist
-                ]
-
-                UI.playlists.remove(p)
-
-                print("Playlist removida!")
-                return
-
-        print("Playlist não encontrada.")
-
-    @staticmethod
-    def inserir_musica():
-        print("\n=== INSERIR MÚSICA ===")
-
-        id_musica = int(input("ID da música: "))
-        titulo = input("Título: ")
-        artista = input("Artista: ")
-        album = input("Álbum: ")
-
-        musica = Musica(id_musica, titulo, artista, album)
-        UI.musicas.append(musica)
-
-        print("Música cadastrada!")
-
-    @staticmethod
-    def listar_musicas():
-        print("\n=== LISTA DE MÚSICAS ===")
-
-        if len(UI.musicas) == 0:
-            print("Nenhuma música cadastrada.")
-            return
-
-        for m in UI.musicas:
-            print(m.ToString())
-
-    @staticmethod
-    def atualizar_musica():
-        print("\n=== ATUALIZAR MÚSICA ===")
-
-        id_musica = int(input("Informe o ID da música: "))
-
-        for m in UI.musicas:
-            if m.get_id() == id_musica:
-
-                novo_titulo = input("Novo título: ")
-                novo_artista = input("Novo artista: ")
-                novo_album = input("Novo álbum: ")
-
-                m.set_titulo(novo_titulo)
-                m.set_artista(novo_artista)
-                m.set_album(novo_album)
-
-                print("Música atualizada!")
-                return
-
-        print("Música não encontrada.")
-
-    @staticmethod
-    def excluir_musica():
-        print("\n=== EXCLUIR MÚSICA ===")
-
-        id_musica = int(input("Informe o ID da música: "))
-
-        for m in UI.musicas:
-            if m.get_id() == id_musica:
-
-                UI.itens = [
-                    i for i in UI.itens
-                    if i.get_idMusica() != id_musica
-                ]
-
-                UI.musicas.remove(m)
-
-                print("Música removida!")
-                return
-
-        print("Música não encontrada.")
-
-
-    @staticmethod
-    def inserir_item():
-        print("\n=== INSERIR ITEM NA PLAYLIST ===")
-
-        id_item = int(input("ID do item: "))
-        id_playlist = int(input("ID da playlist: "))
-        id_musica = int(input("ID da música: "))
-        sequencia = int(input("Sequência: "))
-
-        playlist_existe = False
-        for p in UI.playlists:
-            if p.get_id() == id_playlist:
-                playlist_existe = True
-                break
-
-        if not playlist_existe:
-            print("Playlist não encontrada.")
-            return
-
-        musica_existe = False
-        for m in UI.musicas:
-            if m.get_id() == id_musica:
-                musica_existe = True
-                break
-
-        if not musica_existe:
-            print("Música não encontrada.")
-            return
-
-        item = PlayListItem(
-            id_item,
-            id_playlist,
-            id_musica,
-            sequencia
-        )
-
-        UI.itens.append(item)
-
-        print("Item inserido na playlist!")
-
-    @staticmethod
-    def listar_itens():
-        print("\n=== ITENS DAS PLAYLISTS ===")
-
-        if len(UI.itens) == 0:
-            print("Nenhum item cadastrado.")
-            return
-
-        for i in UI.itens:
-            print(i.ToString())
-
-    @staticmethod
-    def listar_musicas_playlist():
-        print("\n=== MÚSICAS DA PLAYLIST ===")
-
-        id_playlist = int(input("Informe o ID da playlist: "))
-
-        encontrou = False
-
-        itens_ordenados = sorted(
-            UI.itens,
-            key=lambda x: x.get_sequencia()
-        )
-
-        for item in itens_ordenados:
-
-            if item.get_idPlayList() == id_playlist:
-
-                for musica in UI.musicas:
-
-                    if musica.get_id() == item.get_idMusica():
-
-                        print(
-                            f"Sequência: {item.get_sequencia()}"
-                        )
-                        print(musica.ToString())
-                        print("---------------------")
-
-                        encontrou = True
-
-        if not encontrou:
-            print("Nenhuma música encontrada nessa playlist.")
-
-    @staticmethod
-    def excluir_item():
-        print("\n=== EXCLUIR ITEM ===")
-
-        id_item = int(input("Informe o ID do item: "))
-
-        for i in UI.itens:
-            if i.get_id() == id_item:
-
-                UI.itens.remove(i)
-
-                print("Item removido!")
-                return
-
-        print("Item não encontrado.")
-
-
-    @staticmethod
-    def menu():
-        print("\n========== MENU ==========")
-        print("1 - Inserir playlist")
-        print("2 - Listar playlists")
-        print("3 - Atualizar playlist")
-        print("4 - Excluir playlist")
-        print("5 - Inserir música")
-        print("6 - Listar músicas")
-        print("7 - Atualizar música")
-        print("8 - Excluir música")
-        print("9 - Inserir item na playlist")
-        print("10 - Listar itens")
-        print("11 - Listar músicas da playlist")
-        print("12 - Excluir item")
-        print("0 - Sair")
-
-        return int(input("Escolha uma opção: "))
+    Playlists = []
+    Musicas = []
+    Itens = []
 
     @staticmethod
     def main():
+        op = 0
 
-        op = 1
-
-        while op != 0:
-
+        while op != 13:
             op = UI.menu()
 
             if op == 1:
                 UI.inserir_playlist()
 
             elif op == 2:
-                UI.listar_playlists()
+                UI.listar_playlist()
 
             elif op == 3:
                 UI.atualizar_playlist()
@@ -386,7 +146,7 @@ class UI:
                 UI.inserir_musica()
 
             elif op == 6:
-                UI.listar_musicas()
+                UI.listar_musica()
 
             elif op == 7:
                 UI.atualizar_musica()
@@ -398,19 +158,247 @@ class UI:
                 UI.inserir_item()
 
             elif op == 10:
-                UI.listar_itens()
+                UI.listar_item()
 
             elif op == 11:
-                UI.listar_musicas_playlist()
+                UI.atualizar_item()
 
             elif op == 12:
                 UI.excluir_item()
 
-            elif op == 0:
-                print("Programa encerrado!")
+    @staticmethod
+    def menu():
+        print("\n1-Inserir playlist")
+        print("2-Listar playlists")
+        print("3-Atualizar playlist")
+        print("4-Excluir playlist")
+        print("5-Inserir música")
+        print("6-Listar músicas")
+        print("7-Atualizar música")
+        print("8-Excluir música")
+        print("9-Inserir item")
+        print("10-Listar itens")
+        print("11-Atualizar item")
+        print("12-Excluir item")
+        print("13-Fim")
 
-            else:
-                print("Opção inválida!")
+        return int(input("Escolha uma opção: "))
+
+    @classmethod
+    def inserir_playlist(cls):
+        id = int(input("Informe o id da playlist: "))
+        nome = input("Informe o nome da playlist: ")
+        descricao = input("Informe a descrição: ")
+
+        x = PlayList(id, nome, descricao)
+
+        cls.Playlists.append(x)
+
+        print("Playlist inserida com sucesso")
+
+    @classmethod
+    def listar_playlist(cls):
+        if len(cls.Playlists) == 0:
+            print("Nenhuma playlist cadastrada")
+
+        else:
+            for x in cls.Playlists:
+                print(x)
+
+    @classmethod
+    def atualizar_playlist(cls):
+        UI.listar_playlist()
+
+        id = int(input("Informe o id da playlist: "))
+
+        x = UI.Playlist_listarID(id)
+
+        if x != None:
+            cls.Playlists.remove(x)
+
+            nome = input("Informe o novo nome: ")
+            descricao = input("Informe a nova descrição: ")
+
+            novo = PlayList(id, nome, descricao)
+
+            cls.Playlists.append(novo)
+
+            print("Playlist atualizada")
+
+        else:
+            print("Playlist não encontrada")
+
+    @classmethod
+    def excluir_playlist(cls):
+        UI.listar_playlist()
+
+        id = int(input("Informe o id da playlist: "))
+
+        x = UI.Playlist_listarID(id)
+
+        if x != None:
+            cls.Playlists.remove(x)
+
+            print("Playlist removida")
+
+        else:
+            print("Playlist não encontrada")
+
+    @classmethod
+    def inserir_musica(cls):
+        id = int(input("Informe o id da música: "))
+        titulo = input("Informe o título: ")
+        artista = input("Informe o artista: ")
+        album = input("Informe o álbum: ")
+
+        x = Musica(id, titulo, artista, album)
+
+        cls.Musicas.append(x)
+
+        print("Música inserida com sucesso")
+
+    @classmethod
+    def listar_musica(cls):
+        if len(cls.Musicas) == 0:
+            print("Nenhuma música cadastrada")
+
+        else:
+            for x in cls.Musicas:
+                print(x)
+
+    @classmethod
+    def atualizar_musica(cls):
+        UI.listar_musica()
+
+        id = int(input("Informe o id da música: "))
+
+        x = UI.Musica_listarID(id)
+
+        if x != None:
+            cls.Musicas.remove(x)
+
+            titulo = input("Informe o novo título: ")
+            artista = input("Informe o novo artista: ")
+            album = input("Informe o novo álbum: ")
+
+            novo = Musica(id, titulo, artista, album)
+
+            cls.Musicas.append(novo)
+
+            print("Música atualizada")
+
+        else:
+            print("Música não encontrada")
+
+    @classmethod
+    def excluir_musica(cls):
+        UI.listar_musica()
+
+        id = int(input("Informe o id da música: "))
+
+        x = UI.Musica_listarID(id)
+
+        if x != None:
+            cls.Musicas.remove(x)
+
+            print("Música removida")
+
+        else:
+            print("Música não encontrada")
+
+    @classmethod
+    def inserir_item(cls):
+        id = int(input("Informe o id do item: "))
+        idPlaylist = int(input("Informe o id da playlist: "))
+        idMusica = int(input("Informe o id da música: "))
+        sequencia = int(input("Informe a sequência: "))
+
+        if UI.Playlist_listarID(idPlaylist) == None:
+            print("Playlist não encontrada")
+            return
+
+        if UI.Musica_listarID(idMusica) == None:
+            print("Música não encontrada")
+            return
+
+        x = PlayListItem(id, idPlaylist, idMusica, sequencia)
+
+        cls.Itens.append(x)
+
+        print("Item inserido com sucesso")
+
+    @classmethod
+    def listar_item(cls):
+        if len(cls.Itens) == 0:
+            print("Nenhum item cadastrado")
+
+        else:
+            for x in cls.Itens:
+                print(x)
+
+    @classmethod
+    def atualizar_item(cls):
+        UI.listar_item()
+
+        id = int(input("Informe o id do item: "))
+
+        x = UI.Item_listarID(id)
+
+        if x != None:
+            cls.Itens.remove(x)
+
+            idPlaylist = int(input("Informe o novo id da playlist: "))
+            idMusica = int(input("Informe o novo id da música: "))
+            sequencia = int(input("Informe a nova sequência: "))
+
+            novo = PlayListItem(id, idPlaylist, idMusica, sequencia)
+
+            cls.Itens.append(novo)
+
+            print("Item atualizado")
+
+        else:
+            print("Item não encontrado")
+
+    @classmethod
+    def excluir_item(cls):
+        UI.listar_item()
+
+        id = int(input("Informe o id do item: "))
+
+        x = UI.Item_listarID(id)
+
+        if x != None:
+            cls.Itens.remove(x)
+
+            print("Item removido")
+
+        else:
+            print("Item não encontrado")
+
+    @classmethod
+    def Playlist_listarID(cls, id):
+        for x in cls.Playlists:
+            if x.get_id() == id:
+                return x
+
+        return None
+
+    @classmethod
+    def Musica_listarID(cls, id):
+        for x in cls.Musicas:
+            if x.get_id() == id:
+                return x
+
+        return None
+
+    @classmethod
+    def Item_listarID(cls, id):
+        for x in cls.Itens:
+            if x.get_id() == id:
+                return x
+
+        return None
 
 
 UI.main()

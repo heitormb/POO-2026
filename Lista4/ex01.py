@@ -1,272 +1,89 @@
 class Time:
-    def __init__(self, i: int, n: str, e: str):
-        self.__id = i
-        self.__nome = n
-        self.__estado = e
+    def __init__(self, id, nome, estado):
+        self.set_id(id)
+        self.set_nome(nome)
+        self.set_estado(estado)
 
-    def get_id(self):
-        return self.__id
-
-    def get_nome(self):
-        return self.__nome
-
-    def get_estado(self):
-        return self.__estado
+    def set_id(self, id):
+        if id <= 0:
+            raise ValueError("O id deve ser positivo")
+        self.id = id
 
     def set_nome(self, nome):
-        self.__nome = nome
+        if nome == "":
+            raise ValueError("O nome não pode ser vazio")
+        self.nome = nome
 
     def set_estado(self, estado):
-        self.__estado = estado
+        if estado == "":
+            raise ValueError("O estado não pode ser vazio")
+        self.estado = estado
 
-    def ToString(self):
-        return f"ID: {self.__id} | Nome: {self.__nome} | Estado: {self.__estado}"
+    def get_id(self):
+        return self.id
+
+    def get_nome(self):
+        return self.nome
+
+    def get_estado(self):
+        return self.estado
+
+    def __str__(self):
+        return f"{self.id} - {self.nome} - {self.estado}"
 
 
 class Jogador:
-    def __init__(self, i: int, it: int, n: str, v: int):
-        self.__id = i
-        self.__idTime = it
-        self.__nome = n
-        self.__camisa = v
+    def __init__(self, id, idTime, nome, camisa):
+        self.set_id(id)
+        self.set_idTime(idTime)
+        self.set_nome(nome)
+        self.set_camisa(camisa)
 
-    def get_id(self):
-        return self.__id
-
-    def get_idTime(self):
-        return self.__idTime
-
-    def get_nome(self):
-        return self.__nome
-
-    def get_camisa(self):
-        return self.__camisa
+    def set_id(self, id):
+        if id <= 0:
+            raise ValueError("O id deve ser positivo")
+        self.id = id
 
     def set_idTime(self, idTime):
-        self.__idTime = idTime
+        if idTime <= 0:
+            raise ValueError("O id do time deve ser positivo")
+        self.idTime = idTime
 
     def set_nome(self, nome):
-        self.__nome = nome
+        if nome == "":
+            raise ValueError("O nome não pode ser vazio")
+        self.nome = nome
 
     def set_camisa(self, camisa):
-        self.__camisa = camisa
+        if camisa <= 0:
+            raise ValueError("A camisa deve ser positiva")
+        self.camisa = camisa
 
-    def ToString(self):
-        return (
-            f"ID: {self.__id} | "
-            f"Nome: {self.__nome} | "
-            f"Camisa: {self.__camisa} | "
-            f"Time ID: {self.__idTime}"
-        )
+    def get_id(self):
+        return self.id
+
+    def get_idTime(self):
+        return self.idTime
+
+    def get_nome(self):
+        return self.nome
+
+    def get_camisa(self):
+        return self.camisa
+
+    def __str__(self):
+        return f"{self.id} - {self.idTime} - {self.nome} - {self.camisa}"
 
 
 class UI:
-    times = []
-    jogadores = []
-
-
-    @staticmethod
-    def inserir_time():
-        print("\n=== INSERIR TIME ===")
-
-        id_time = int(input("ID do time: "))
-        nome = input("Nome do time: ")
-        estado = input("Estado: ")
-
-        time = Time(id_time, nome, estado)
-        UI.times.append(time)
-
-        print("Time cadastrado com sucesso!")
-
-    @staticmethod
-    def listar_time():
-        print("\n=== LISTA DE TIMES ===")
-
-        if len(UI.times) == 0:
-            print("Nenhum time cadastrado.")
-            return
-
-        for t in UI.times:
-            print(t.ToString())
-
-    @staticmethod
-    def atualizar_time():
-        print("\n=== ATUALIZAR TIME ===")
-
-        id_time = int(input("Informe o ID do time: "))
-
-        for t in UI.times:
-            if t.get_id() == id_time:
-                novo_nome = input("Novo nome: ")
-                novo_estado = input("Novo estado: ")
-
-                t.set_nome(novo_nome)
-                t.set_estado(novo_estado)
-
-                print("Time atualizado!")
-                return
-
-        print("Time não encontrado.")
-
-    @staticmethod
-    def excluir_time():
-        print("\n=== EXCLUIR TIME ===")
-
-        id_time = int(input("Informe o ID do time: "))
-
-        for t in UI.times:
-            if t.get_id() == id_time:
-
-                # Remove jogadores do time
-                UI.jogadores = [
-                    j for j in UI.jogadores
-                    if j.get_idTime() != id_time
-                ]
-
-                UI.times.remove(t)
-
-                print("Time removido!")
-                return
-
-        print("Time não encontrado.")
-
-    @staticmethod
-    def inserir_jogador():
-        print("\n=== INSERIR JOGADOR ===")
-
-        id_jogador = int(input("ID do jogador: "))
-        id_time = int(input("ID do time: "))
-        nome = input("Nome do jogador: ")
-        camisa = int(input("Número da camisa: "))
-
-        time_existe = False
-
-        for t in UI.times:
-            if t.get_id() == id_time:
-                time_existe = True
-                break
-
-        if not time_existe:
-            print("Time não encontrado.")
-            return
-
-        jogador = Jogador(id_jogador, id_time, nome, camisa)
-        UI.jogadores.append(jogador)
-
-        print("Jogador cadastrado!")
-
-    @staticmethod
-    def listar_jogador():
-        print("\n=== LISTA DE JOGADORES ===")
-
-        if len(UI.jogadores) == 0:
-            print("Nenhum jogador cadastrado.")
-            return
-
-        for j in UI.jogadores:
-            print(j.ToString())
-
-    @staticmethod
-    def editar_jogador():
-        print("\n=== EDITAR JOGADOR ===")
-
-        id_jogador = int(input("Informe o ID do jogador: "))
-
-        for j in UI.jogadores:
-            if j.get_id() == id_jogador:
-
-                novo_nome = input("Novo nome: ")
-                nova_camisa = int(input("Novo número da camisa: "))
-
-                j.set_nome(novo_nome)
-                j.set_camisa(nova_camisa)
-
-                print("Jogador atualizado!")
-                return
-
-        print("Jogador não encontrado.")
-
-    @staticmethod
-    def excluir_jogador():
-        print("\n=== EXCLUIR JOGADOR ===")
-
-        id_jogador = int(input("Informe o ID do jogador: "))
-
-        for j in UI.jogadores:
-            if j.get_id() == id_jogador:
-                UI.jogadores.remove(j)
-
-                print("Jogador removido!")
-                return
-
-        print("Jogador não encontrado.")
-
-    @staticmethod
-    def listar_jogadores_do_time():
-        print("\n=== JOGADORES DO TIME ===")
-
-        id_time = int(input("Informe o ID do time: "))
-
-        encontrou = False
-
-        for j in UI.jogadores:
-            if j.get_idTime() == id_time:
-                print(j.ToString())
-                encontrou = True
-
-        if not encontrou:
-            print("Nenhum jogador encontrado nesse time.")
-
-    @staticmethod
-    def transferir_jogador():
-        print("\n=== TRANSFERIR JOGADOR ===")
-
-        id_jogador = int(input("ID do jogador: "))
-        novo_time = int(input("Novo ID do time: "))
-
-        existe = False
-
-        for t in UI.times:
-            if t.get_id() == novo_time:
-                existe = True
-                break
-
-        if not existe:
-            print("Time destino não encontrado.")
-            return
-
-        for j in UI.jogadores:
-            if j.get_id() == id_jogador:
-                j.set_idTime(novo_time)
-
-                print("Jogador transferido!")
-                return
-
-        print("Jogador não encontrado.")
-
-    @staticmethod
-    def menu():
-        print("\n========== MENU ==========")
-        print("1 - Inserir time")
-        print("2 - Listar times")
-        print("3 - Atualizar time")
-        print("4 - Excluir time")
-        print("5 - Inserir jogador")
-        print("6 - Listar jogadores")
-        print("7 - Editar jogador")
-        print("8 - Excluir jogador")
-        print("9 - Listar jogadores do time")
-        print("10 - Transferir jogador")
-        print("0 - Sair")
-
-        return int(input("Escolha uma opção: "))
+    Times = []
+    Jogadores = []
 
     @staticmethod
     def main():
-        op = 1
+        op = 0
 
-        while op != 0:
-
+        while op != 11:
             op = UI.menu()
 
             if op == 1:
@@ -288,7 +105,7 @@ class UI:
                 UI.listar_jogador()
 
             elif op == 7:
-                UI.editar_jogador()
+                UI.atualizar_jogador()
 
             elif op == 8:
                 UI.excluir_jogador()
@@ -299,11 +116,197 @@ class UI:
             elif op == 10:
                 UI.transferir_jogador()
 
-            elif op == 0:
-                print("Programa encerrado!")
+    @staticmethod
+    def menu():
+        print("\n1-Inserir time")
+        print("2-Listar times")
+        print("3-Atualizar time")
+        print("4-Excluir time")
+        print("5-Inserir jogador")
+        print("6-Listar jogadores")
+        print("7-Atualizar jogador")
+        print("8-Excluir jogador")
+        print("9-Listar jogadores de um time")
+        print("10-Transferir jogador")
+        print("11-Fim")
 
-            else:
-                print("Opção inválida!")
+        return int(input("Escolha uma opção: "))
+
+    @classmethod
+    def inserir_time(cls):
+        id = int(input("Informe o id do time: "))
+        nome = input("Informe o nome do time: ")
+        estado = input("Informe o estado: ")
+
+        x = Time(id, nome, estado)
+
+        cls.Times.append(x)
+
+        print("Time inserido com sucesso")
+
+    @classmethod
+    def listar_time(cls):
+        if len(cls.Times) == 0:
+            print("Nenhum time cadastrado")
+
+        else:
+            for x in cls.Times:
+                print(x)
+
+    @classmethod
+    def atualizar_time(cls):
+        UI.listar_time()
+
+        id = int(input("Informe o id do time: "))
+
+        x = UI.Time_listarID(id)
+
+        if x != None:
+            cls.Times.remove(x)
+
+            nome = input("Informe o novo nome: ")
+            estado = input("Informe o novo estado: ")
+
+            novo = Time(id, nome, estado)
+
+            cls.Times.append(novo)
+
+            print("Time atualizado")
+
+        else:
+            print("Time não encontrado")
+
+    @classmethod
+    def excluir_time(cls):
+        UI.listar_time()
+
+        id = int(input("Informe o id do time: "))
+
+        x = UI.Time_listarID(id)
+
+        if x != None:
+            cls.Times.remove(x)
+
+            print("Time removido")
+
+        else:
+            print("Time não encontrado")
+
+    @classmethod
+    def inserir_jogador(cls):
+        id = int(input("Informe o id do jogador: "))
+        idTime = int(input("Informe o id do time: "))
+        nome = input("Informe o nome do jogador: ")
+        camisa = int(input("Informe a camisa: "))
+
+        if UI.Time_listarID(idTime) == None:
+            print("Time não encontrado")
+            return
+
+        x = Jogador(id, idTime, nome, camisa)
+
+        cls.Jogadores.append(x)
+
+        print("Jogador inserido com sucesso")
+
+    @classmethod
+    def listar_jogador(cls):
+        if len(cls.Jogadores) == 0:
+            print("Nenhum jogador cadastrado")
+
+        else:
+            for x in cls.Jogadores:
+                print(x)
+
+    @classmethod
+    def atualizar_jogador(cls):
+        UI.listar_jogador()
+
+        id = int(input("Informe o id do jogador: "))
+
+        x = UI.Jogador_listarID(id)
+
+        if x != None:
+            cls.Jogadores.remove(x)
+
+            idTime = int(input("Informe o novo id do time: "))
+            nome = input("Informe o novo nome: ")
+            camisa = int(input("Informe a nova camisa: "))
+
+            novo = Jogador(id, idTime, nome, camisa)
+
+            cls.Jogadores.append(novo)
+
+            print("Jogador atualizado")
+
+        else:
+            print("Jogador não encontrado")
+
+    @classmethod
+    def excluir_jogador(cls):
+        UI.listar_jogador()
+
+        id = int(input("Informe o id do jogador: "))
+
+        x = UI.Jogador_listarID(id)
+
+        if x != None:
+            cls.Jogadores.remove(x)
+
+            print("Jogador removido")
+
+        else:
+            print("Jogador não encontrado")
+
+    @classmethod
+    def listar_jogadores_do_time(cls):
+        idTime = int(input("Informe o id do time: "))
+
+        encontrou = False
+
+        for x in cls.Jogadores:
+            if x.get_idTime() == idTime:
+                print(x)
+                encontrou = True
+
+        if encontrou == False:
+            print("Nenhum jogador encontrado")
+
+    @classmethod
+    def transferir_jogador(cls):
+        idJogador = int(input("Informe o id do jogador: "))
+
+        jogador = UI.Jogador_listarID(idJogador)
+
+        if jogador == None:
+            print("Jogador não encontrado")
+            return
+
+        novoTime = int(input("Informe o novo id do time: "))
+
+        if UI.Time_listarID(novoTime) == None:
+            print("Time não encontrado")
+            return
+
+        jogador.set_idTime(novoTime)
+
+        print("Jogador transferido com sucesso")
+
+    @classmethod
+    def Time_listarID(cls, id):
+        for x in cls.Times:
+            if x.get_id() == id:
+                return x
+
+        return None
+
+    @classmethod
+    def Jogador_listarID(cls, id):
+        for x in cls.Jogadores:
+            if x.get_id() == id:
+                return x
+
+        return None
 
 
 UI.main()
