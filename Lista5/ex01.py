@@ -70,6 +70,41 @@ class PacienteUI:
     def listar(cls):
         for x in cls.__pacientes: print(x, x.idade())
 
+    @classmethod
+    def atualizar(cls):
+        for x in cls.__pacientes: print(x)
+        id = int(input("Informe o id do paciente a ser atualizado: "))
+        for x in cls.__pacientes:
+            if x.get_id() == id:
+                nome = input("Informe o novo nome: ")
+                cpf = input("Informe o novo CPF: ")
+                fone = input("Informe o novo telefone: ")
+                nasc = datetime.strptime(input("Informe a nova data de nascimento; "), "%d/%m/%Y")
+                x.set_nome(nome)
+                x.set_cpf(cpf)
+                x.set_telefone(fone)
+                x.set_nascimento(nasc)
+
+    @classmethod
+    def excluir(cls):
+        for x in cls.__pacientes: print(x)
+        id = int(input("Informe o id do paciente a ser atualizado: "))
+        for x in cls.__pacientes:
+            if x.get_id() == id:
+                cls.pacientes.remove(x)
+
+    @classmethod
+    def pesquisar(cls):
+        s = input("informe as iniciais do nome: ")
+        for x in cls.__pacientes:
+            if x.get_nome().startswith(s): print(x)
+
+    @classmethod
+    def aniversariantes(cls):
+        m = int(input("Informe o mês para a lista de aniversariantes (1 - 12): "))
+        for x in cls.__pacientes:
+            if x.get_nascimento().month == m: print(x)
+
 
 
 PacienteUI.main()
