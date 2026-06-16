@@ -1,219 +1,168 @@
 from datetime import datetime
+from enum import Enum
 
-class Pagamento:
-    EM_ABERTO = 1
-    PAGO_PARCIAL = 2
-    PAGO = 3
+# ==============================================================================
+# Enumeração para as situações de pagamento
+# ==============================================================================
+class Pagamento(Enum):
+    EmAberto = 1
+    PagoParcial = 2
+    Pago = 3
 
+
+# ==============================================================================
+# Classe do modelo: Boleto
+# ==============================================================================
 class Boleto:
-    def __init__(self, cod: str, emissao: datetime, venc: datetime, valor: float):
+    def __init__(self, cod, emissao, venc, valor):
         self.set_codBarras(cod)
         self.set_dateEmissao(emissao)
         self.set_dataVencimento(venc)
-        self.set_dataPagto(None) # Inicialmente sem data de pagamento
         self.set_valorBoleto(valor)
-        self.set_valorPago(0.0) # Inicialmente nenhum valor foi pago
-        self.set_situacaoPagamento(Pagamento.EM_ABERTO)
+        self.__dataPagto = None
+        self.__valorPago = 0.0
 
+    # Métodos Setters com as validações
     def set_codBarras(self, cod):
-        if cod == "": raise ValueError("Código de barras não pode ser vazio")
+        if cod == "": raise ValueError("Código de barras não pode ser vazio.")
         self.__codBarras = cod
 
     def set_dateEmissao(self, emissao):
         self.__dateEmissao = emissao
 
     def set_dataVencimento(self, venc):
-        if venc < self.__dateEmissao: raise ValueError("Vencimento não pode ser anterior à emissão")
+        if venc < self.__dateEmissao: raise ValueError("Vencimento inválido.")
         self.__dataVencimento = venc
 
-    def set_dataPagto(self, data):
-        self.__dataPagto = data
-
     def set_valorBoleto(self, valor):
-        if valor <= 0: raise ValueError("Valor do boleto deve ser maior que zero")
+        if valor <= 0: raise ValueError("Valor deve ser maior que zero.")
         self.__valorBoleto = valor
 
-    def set_valorPago(self, valor):
-        if valor < 0: raise ValueError("Valor pago não pode ser negativo")
-        self.__valorPago = valor
+    def set_dataPagto(self, dataPagto):
+        self.__dataPagto = dataPagto
 
-    def set_situacaoPagamento(self, situacao):
-        self.__situacaoPagamento = situacao
+    def set_valorPago(self, valorPago):
+        if valorPago < 0: raise ValueError("Valor pago inválido.")
+        self.__valorPago = valorPago
 
+    # Métodos Getters
     def get_codBarras(self): return self.__codBarras
     def get_dateEmissao(self): return self.__dateEmissao
     def get_dataVencimento(self): return self.__dataVencimento
     def get_dataPagto(self): return self.__dataPagto
     def get_valorBoleto(self): return self.__valorBoleto
     def get_valorPago(self): return self.__valorPago
-    def get_situacaoPagamento(self): return self.__situacaoPagamento
 
-    def Pagar(self, valorPago: float):
-        if self.__situacaoPagamento == Pagamento.PAGO:
-            raise ValueError("Este boleto já está totalmente pago")
-        
-        if valorPago <= 0:
-            raise ValueError("O valor pago deve ser maior que zero")
-            
-        novo_total_pago = self.__valorPago + valorPago
-        if novo_total_pago > self.__valorBoleto:
-            raise ValueError("O valor total pago não pode ser maior que o valor do boleto")
-            
-        self.set_valorPago(novo_total_pago)
+    # Método Pagar
+    def Pagar(self, valorPago):
+        if valorPago <= 0: raise ValueError("Valor deve ser maior que zero.")
+        if valorPago > self.__valorBoleto: raise ValueError("Valor maior que o boleto.")
+        self.set_valorPago(valorPago)
         self.set_dataPagto(datetime.now())
-        
-        if self.__valorPago == self.__valorBoleto:
-            self.set_situacaoPagamento(Pagamento.PAGO)
-        else:
-            self.set_situacaoPagamento(Pagamento.PAGO_PARCIAL)
 
+    # Método Situacao
     def Situacao(self):
-        if self.__situacaoPagamento == Pagamento.EM_ABERTO: return "Em Aberto"
-        if self.__situacaoPagamento == Pagamento.PAGO_PARCIAL: return "Pago Parcial"
-        if self.__situacaoPagamento == Pagamento.PAGO: return "Pago"
+        if self.__valorPago == 0: return Pagamento.EmAberto
+        if self.__valorPago < self.__valorBoleto: return Pagamento.PagoParcial
+        return Pagamento.Pago
 
+    # Método ToString sem NENHUMA operação ou if/else interno
     def __str__(self):
-        dt_venc = self.__dataVencimento.strftime("%d/%m/%Y")
-        dt_pagto = self.__dataPagto.strftime("%d/%m/%Y") if self.__dataPagto else "Não pago"
-        return f"Cód: {self.__codBarras} | Venc: {dt_venc} | Total: R${self.__valorBoleto:.2f} | Pago: R${self.__valorPago:.2f} | Status: {self.Situacao()} | Pago em: {dt_pagto}"
+        return f"{self.__codBarras} - {self.__dateEmissao} - {self.__dataVencimento} - {self.__valorBoleto} - {self.__valorPago} - {self.__dataPagto} - {self.Situacao()}"
 
 
+# ==============================================================================
+# Classe de interface com o usuário: BoletoUI
+# ==============================================================================
 class BoletoUI:
     __boletos = []
 
     @staticmethod
     def main():
         op = 0
-        while op != 11: # 11 é a opção Sair do menu
-            op = BoletoUI.Menu()
-            if op == 1: BoletoUI.Inserir()
-            elif op == 2: BoletoUI.Listar()
-            elif op == 3: BoletoUI.Atualizar()
-            elif op == 4: BoletoUI.Excluir()
-            elif op == 5: BoletoUI.BoletosEmAberto()
-            elif op == 6: BoletoUI.BoletosPagos()
-            elif op == 7: BoletoUI.BoletosAVencer()
-            elif op == 8: BoletoUI.BoletosVencidos()
-            elif op == 9: BoletoUI.PagarBoleto()
+        while op != 10:
+            try:
+                op = BoletoUI.menu()
+                if op == 1: BoletoUI.Inserir()
+                if op == 2: BoletoUI.Listar()
+                if op == 3: BoletoUI.Page_Atualizar()
+                if op == 4: BoletoUI.Excluir()
+                if op == 5: BoletoUI.BoletosEmAberto()
+                if op == 6: BoletoUI.BoletosPagos()
+                if op == 7: BoletoUI.BoletosAVencer()
+                if op == 8: BoletoUI.BoletosVencidos()
+                if op == 9: BoletoUI.PagarBoleto()
+            except ValueError as e:
+                print(f"Erro: {e}")
 
     @staticmethod
-    def Menu():
-        print("\n--- MENU BOLETOS ---")
-        print("1-Inserir, 2-Listar, 3-Atualizar, 4-Excluir")
-        print("5-Em Aberto, 6-Pagos (Parcial/Total), 7-A Vencer, 8-Vencidos")
-        print("9-Pagar Boleto, 11-Sair")
-        try:
-            return int(input("Informe uma opção: "))
-        except ValueError:
-            return 0
+    def menu():
+        print("1-Inserir, 2-Listar, 3-Atualizar, 4-Excluir, 5-Em Aberto, 6-Pagos, 7-A Vencer, 8-Vencidos, 9-Pagar, 10-Fim")
+        return int(input("Informe uma opção: "))
 
     @classmethod
     def Inserir(cls):
-        print("\n--- Inserir Boleto ---")
-        try:
-            cod = input("Código de barras: ")
-            emissao = datetime.strptime(input("Data de Emissão (dd/mm/aaaa): "), "%d/%m/%Y")
-            venc = datetime.strptime(input("Data de Vencimento (dd/mm/aaaa): "), "%d/%m/%Y")
-            valor = float(input("Valor do Boleto: R$ "))
-            
-            x = Boleto(cod, emissao, venc, valor)
-            cls.__boletos.append(x)
-            print("Boleto cadastrado com sucesso!")
-        except Exception as e:
-            print(f"Erro: {e}")
+        cod = input("Código de barras: ")
+        emissao = datetime.strptime(input("Emissão (dd/mm/aaaa): "), "%d/%m/%Y")
+        venc = datetime.strptime(input("Vencimento (dd/mm/aaaa): "), "%d/%m/%Y")
+        valor = float(input("Valor do boleto: "))
+        x = Boleto(cod, emissao, venc, valor)
+        cls.__boletos.append(x)
 
     @classmethod
     def Listar(cls):
-        print("\n--- Todos os Boletos ---")
-        if not cls.__boletos: print("Nenhum boleto cadastrado.")
         for x in cls.__boletos: print(x)
 
     @classmethod
-    def Atualizar(cls):
-        print("\n--- Atualizar Boleto ---")
-        cod = input("Informe o código do boleto a ser atualizado: ")
+    def Page_Atualizar(cls):
+        for x in cls.__boletos: print(x)
+        cod = input("Código do boleto a atualizar: ")
         for x in cls.__boletos:
             if x.get_codBarras() == cod:
-                try:
-                    venc = datetime.strptime(input("Nova Data de Vencimento (dd/mm/aaaa): "), "%d/%m/%Y")
-                    valor = float(input("Novo Valor do Boleto: R$ "))
-                    x.set_dataVencimento(venc)
-                    x.set_valorBoleto(valor)
-                    print("Boleto atualizado com sucesso!")
-                    return
-                except Exception as e:
-                    print(f"Erro: {e}")
-                    return
-        print("Boleto não encontrado.")
+                emissao = datetime.strptime(input("Nova data de emissão: "), "%d/%m/%Y")
+                venc = datetime.strptime(input("Nova data de vencimento: "), "%d/%m/%Y")
+                valor = float(input("Novo valor: "))
+                x.set_dateEmissao(emissao)
+                x.set_dataVencimento(venc)
+                x.set_valorBoleto(valor)
 
     @classmethod
     def Excluir(cls):
-        print("\n--- Excluir Boleto ---")
-        cod = input("Informe o código do boleto a ser excluído: ")
+        for x in cls.__boletos: print(x)
+        cod = input("Código do boleto a excluir: ")
         for x in cls.__boletos:
             if x.get_codBarras() == cod:
                 cls.__boletos.remove(x)
-                print("Boleto removido com sucesso!")
-                return
-        print("Boleto não encontrado.")
 
     @classmethod
     def BoletosEmAberto(cls):
-        print("\n--- Boletos em Aberto ---")
-        cont = 0
         for x in cls.__boletos:
-            if x.get_situacaoPagamento() == Pagamento.EM_ABERTO:
-                print(x)
-                cont += 1
-        if cont == 0: print("Nenhum boleto em aberto.")
+            if x.Situacao() == Pagamento.EmAberto: print(x)
 
     @classmethod
     def BoletosPagos(cls):
-        print("\n--- Boletos Pagos (Parcial ou Total) ---")
-        cont = 0
         for x in cls.__boletos:
-            if x.get_situacaoPagamento() in [Pagamento.PAGO_PARCIAL, Pagamento.PAGO]:
-                print(x)
-                cont += 1
-        if cont == 0: print("Nenhum boleto pago.")
+            if x.Situacao() == Pagamento.Pago or x.Situacao() == Pagamento.PagoParcial: print(x)
 
     @classmethod
     def BoletosAVencer(cls):
-        print("\n--- Boletos a Vencer (Não pagos e dentro do prazo) ---")
         hoje = datetime.now()
-        cont = 0
         for x in cls.__boletos:
-            if x.get_situacaoPagamento() != Pagamento.PAGO and x.get_dataVencimento() >= hoje:
-                print(x)
-                cont += 1
-        if cont == 0: print("Nenhum boleto a vencer encontrado.")
+            if x.Situacao() == Pagamento.EmAberto and x.get_dataVencimento() >= hoje: print(x)
 
     @classmethod
     def BoletosVencidos(cls):
-        print("\n--- Boletos Vencidos (Não pagos e fora do prazo) ---")
         hoje = datetime.now()
-        cont = 0
         for x in cls.__boletos:
-            if x.get_situacaoPagamento() != Pagamento.PAGO and x.get_dataVencimento() < hoje:
-                print(x)
-                cont += 1
-        if cont == 0: print("Nenhum boleto vencido encontrado.")
+            if x.Situacao() == Pagamento.EmAberto and x.get_dataVencimento() < hoje: print(x)
 
     @classmethod
     def PagarBoleto(cls):
-        print("\n--- Efetuar Pagamento de Boleto ---")
-        cod = input("Informe o código do boleto: ")
+        cod = input("Código do boleto a pagar: ")
         for x in cls.__boletos:
             if x.get_codBarras() == cod:
-                try:
-                    valor = float(input(f"Valor do boleto é R${x.get_valorBoleto():.2f} (Já pago: R${x.get_valorPago():.2f}). Informe o quanto vai pagar agora: R$ "))
-                    x.Pagar(valor)
-                    print("Pagamento registrado com sucesso!")
-                    return
-                except Exception as e:
-                    print(f"Erro: {e}")
-                    return
-        print("Boleto não encontrado.")
+                valor = float(input("Valor a pagar: "))
+                x.Pagar(valor)
 
 
 BoletoUI.main()
