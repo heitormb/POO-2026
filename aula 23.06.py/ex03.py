@@ -7,7 +7,7 @@ class Cliente:
         self.set_nome(nome)
         self.set_email(email)
         self.set_fone(fone)
-   
+    
     def set_id(self, id):
         if id < 0: raise ValueError("Id deve ser positivo")
         self.__id = id
@@ -28,10 +28,10 @@ class Cliente:
 
     def __str__(self):
         return f"{self.__id} - {self.__nome} - {self.__email} - {self.__fone}"
-   
+    
     def to_json(self):
         return { "id":self.__id, "nome":self.__nome, "email":self.__email, "fone":self.__fone }
-   
+    
     @staticmethod
     def from_json(dic):
         return Cliente(dic["id"], dic["nome"], dic["email"], dic["fone"])
@@ -40,6 +40,7 @@ class Cliente:
 class ClienteUI:
     __objetos = []
     __clientes_json = Path(__file__).resolve().parent / "clientes.json"
+
     @staticmethod
     def main():
         ClienteUI.abrir()
@@ -48,12 +49,16 @@ class ClienteUI:
             op = ClienteUI.menu()
             if op == 1: ClienteUI.inserir()
             if op == 2: ClienteUI.listar()
-            if op == 3: ClienteUI.atualizar()
-            if op == 4: ClienteUI.excluir()
+            if op == 3: ClienteUI.listar_id()   # <--- ADICIONADO AQUI
+            if op == 4: ClienteUI.atualizar()
+            if op == 5: ClienteUI.excluir()
+            if op == 6: ClienteUI.abrir()       # <--- ADICIONADO AQUI
+            if op == 7: ClienteUI.salvar()      # <--- ADICIONADO AQUI
 
     @staticmethod
     def menu():
-        print("1-Inserir, 2-Listar, 3-Atualizar, 4-Excluir, 9-Fim")
+        # Apenas atualizado o texto com as novas opções
+        print("1-Inserir, 2-Listar, 3-Listar ID, 4-Atualizar, 5-Excluir, 6-Abrir, 7-Salvar, 9-Fim")
         return int(input("Informe uma opção: "))
 
     @classmethod
@@ -88,6 +93,14 @@ class ClienteUI:
     @classmethod
     def listar(cls):                
         for x in cls.__objetos: print(x)
+
+    # <--- MÉTODO NOVO ADICIONADO (EXATAMENTE COMO O PROFESSOR PEDE)
+    @classmethod
+    def listar_id(cls):
+        id = int(input("Informe o id a ser buscado: "))
+        for x in cls.__objetos:
+            if x.get_id() == id:
+                print(x)
 
     @classmethod
     def atualizar(cls):
