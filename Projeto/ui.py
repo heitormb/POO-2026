@@ -71,7 +71,8 @@ class UI:
     nome = input("Informe o nome: ")
     email = input("Informe o e-mail: ")
     fone = input("Informe o telefone: ")
-    Service.cliente_inserir(nome, email, fone)
+    id_convenio = input("Informe o id convenio: ")
+    Service.cliente_inserir(nome, email, fone, id_convenio)
 
   @staticmethod
   def cliente_listar():
@@ -85,7 +86,8 @@ class UI:
     nome = input("Informe o novo nome: ")
     email = input("Informe o novo e-mail: ")
     fone = input("Informe o novo telefone: ")
-    Service.cliente_atualizar(id, nome, email, fone)
+    id_convenio = int(input("Informe o novo id convenio: "))
+    Service.cliente_atualizar(id, nome, email, fone, id_convenio)
 
   @staticmethod
   def cliente_excluir():
@@ -300,6 +302,33 @@ class UI:
     UI.atendimento_listar()
     id = int(input("Informe o ID do atendimento a ser excluído: "))
     Service.atendimento_excluir(id)
+
+  @staticmethod
+  def convenio_inserir():
+    nome = input("Informe o nome: ")
+    contato = input("Informe o contato: ")
+    fone = input("Informe o telefone: ")
+    Service.convenio_inserir(nome, contato, fone)
+
+  @staticmethod
+  def convenio_listar():
+    for obj in Service.convenio_listar():
+      print(obj)
+
+  @staticmethod
+  def convenio_atualizar():
+    UI.convenio_listar()
+    id = int(input("Informe o id do convênio a ser atualizado: "))
+    nome = input("Informe o novo nome: ")
+    contato = input("Informe o novo contato: ")
+    fone = input("Informe o novo telefone: ")
+    Service.convenio_atualizar(id, nome, contato, fone)
+
+  @staticmethod
+  def convenio_excluir():
+    UI.convenio_listar()
+    id = int(input("Informe o id do convênio a ser excluído: "))
+    Service.convenio_excluir(id)
 
 
 if __name__ == "__main__":
