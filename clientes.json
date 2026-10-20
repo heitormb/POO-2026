@@ -6,5 +6,13 @@
     "fone": "fone",
     "id_convenio": 1,
     "senha": "admin"
+  },
+  {
+    "id": 2,
+    "nome": "mascena",
+    "email": "mascena",
+    "fone": "67",
+    "id_convenio": 67,
+    "senha": "67"
   }
 ]

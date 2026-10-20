@@ -15,36 +15,35 @@ class IndexUI:
     def main():
         Service.cliente_criar_admin()
         IndexUI.sidebar()
-        op = st.sidebar.selectbox("Menu", ["Clientes", "Serviços", "Horários", "Profissionais", "Atendimentos", "Convênios"])
-        if op == "Clientes": ManterClienteUI.main()
-        if op == "Serviços": ManterServicoUI.main()
-        if op == "Horários": ManterHorarioUI.main()
-        if op == "Profissionais": ManterProfissionalUI.main()
-        if op == "Atendimentos": ManterAtendimentoUI.main()
-        if op == "Convênios": ManterConvenioUI.main()
 
     @staticmethod
     def menu_visitante():
-        op = st.sidebar.selectbox("Menu", ["Entrar no Sistema", "Abrir Conta"])
+        op = st.sidebar.selectbox("Menu", ["Entrar no Sistema", "Abrir Conta"], key="menu_visitante")
         if op == "Entrar no Sistema": LoginUI.main()
-        if op == "Abrir Conta": AbrirContaUI.main()
+        elif op == "Abrir Conta": AbrirContaUI.main()
 
     @staticmethod
     def menu_cliente():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados"])
+        op = st.sidebar.selectbox("Menu", ["Meus Dados"], key="menu_cliente")
         if op == "Meus Dados": PerfilClienteUI.main()
 
     @staticmethod
     def menu_admin():
-        op = st.sidebar.selectbox("Menu", ["Cadastro de Clientes", "Cadastro de Serviços", "Cadastro de Horários", "Cadastro de Profissionais"])
+        op = st.sidebar.selectbox(
+            "Menu", 
+            ["Cadastro de Clientes", "Cadastro de Serviços", "Cadastro de Horários", "Cadastro de Profissionais", "Atendimentos", "Convênios"], 
+            key="menu_admin"
+        )
         if op == "Cadastro de Clientes": ManterClienteUI.main()
-        if op == "Cadastro de Serviços": ManterServicoUI.main()
-        if op == "Cadastro de Horários": ManterHorarioUI.main()
-        if op == "Cadastro de Profissionais": ManterProfissionalUI.main()
+        elif op == "Cadastro de Serviços": ManterServicoUI.main()
+        elif op == "Cadastro de Horários": ManterHorarioUI.main()
+        elif op == "Cadastro de Profissionais": ManterProfissionalUI.main()
+        elif op == "Atendimentos": ManterAtendimentoUI.main()
+        elif op == "Convênios": ManterConvenioUI.main()
 
     @staticmethod
     def sair_do_sistema():
-        if st.sidebar.button("Sair"):
+        if st.sidebar.button("Sair", key="btn_sair"):
             del st.session_state["usuario_id"]
             del st.session_state["usuario_nome"]
             st.rerun()
