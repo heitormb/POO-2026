@@ -197,6 +197,24 @@ class Service:
             if horario and horario.get_id_cliente() == id_cliente:
                 r.append(a)
         return r
+
+    @staticmethod
+    def atendimento_totalizar(data_inicio, data_fim):
+        profissionais = Service.profissional_listar()
+        resultado = []
+        for p in profissionais:
+            qtd = 0
+            for a in Service.atendimento_listar():
+                horario = Service.horario_listar_id(a.get_id_horario())
+                if horario and horario.get_id_profissional() == p.get_id():
+                    if data_inicio <= a.get_data().date() <= data_fim:
+                        qtd += 1
+            resultado.append({
+                "profissional": p.get_nome(),
+                "especialidade": p.get_especialidade(),
+                "quantidade": qtd
+            })
+        return resultado
       
     @staticmethod
     def atendimento_atualizar(id, data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario):
