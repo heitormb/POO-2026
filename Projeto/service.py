@@ -175,6 +175,11 @@ class Service:
     def atendimento_inserir(data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario):
       a = Atendimento(0, data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario)
       AtendimentoDAO().inserir(a)
+
+    @staticmethod
+    def atendimento_inserir_completo(data, queixa, historico, avaliacao, prescricao, id_horario, total, pago):
+        a = Atendimento(0, data, queixa, historico, avaliacao, prescricao, id_horario, total, pago)
+        AtendimentoDAO().inserir(a)
       
     @staticmethod
     def atendimento_listar():
@@ -183,6 +188,15 @@ class Service:
     @staticmethod
     def atendimento_listar_id(id):
       return AtendimentoDAO().listar_id(id)
+
+    @staticmethod
+    def atendimento_listar_cliente(id_cliente):
+        r = []
+        for a in Service.atendimento_listar():
+            horario = Service.horario_listar_id(a.get_id_horario())
+            if horario and horario.get_id_cliente() == id_cliente:
+                r.append(a)
+        return r
       
     @staticmethod
     def atendimento_atualizar(id, data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario):

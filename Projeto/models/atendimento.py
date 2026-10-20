@@ -10,6 +10,8 @@ class Atendimento:
       avaliacao,
       prescricao,
       id_horario,
+      total=0.0,
+      pago=False,
   ):
     self.set_id(id)
     self.set_data(data)
@@ -18,6 +20,8 @@ class Atendimento:
     self.set_avaliacao(avaliacao)
     self.set_prescricao(prescricao)
     self.set_id_horario(id_horario)
+    self.set_total(total)
+    self.set_pago(pago)
 
   def get_id(self):
     return self.__id
@@ -40,6 +44,12 @@ class Atendimento:
   def get_id_horario(self):
     return self.__id_horario
 
+  def get_total(self):
+    return self.__total
+
+  def get_pago(self):
+    return self.__pago
+
   def set_id(self, id):
     self.__id = id
 
@@ -61,8 +71,14 @@ class Atendimento:
   def set_id_horario(self, id_horario):
     self.__id_horario = id_horario
 
+  def set_total(self, total):
+    self.__total = float(total)
+
+  def set_pago(self, pago):
+    self.__pago = bool(pago)
+
   def __str__(self):
-    return f"{self.__id} - {self.__data.strftime('%d/%m/%Y %H:%M')} - Queixa: {self.__queixa_principal}"
+    return f"{self.__id} - {self.__data.strftime('%d/%m/%Y %H:%M')} - Queixa: {self.__queixa_principal} - Pago: {self.__pago}"
 
   def to_json(self):
     return {
@@ -73,6 +89,8 @@ class Atendimento:
         "avaliacao": self.__avaliacao,
         "prescricao": self.__prescricao,
         "id_horario": self.__id_horario,
+        "total": self.__total,
+        "pago": self.__pago,
     }
 
   @staticmethod
@@ -85,4 +103,6 @@ class Atendimento:
         dic["avaliacao"],
         dic["prescricao"],
         dic["id_horario"],
+        dic.get("total", 0.0),
+        dic.get("pago", False),
     )

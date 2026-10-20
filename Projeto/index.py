@@ -14,6 +14,8 @@ from templates.abrirminhaagendaui import AbrirMinhaAgendaUI
 from templates.visualizarminhaagendaui import VisualizarMinhaAgendaUI
 from templates.visualizarmeusservicosui import VisualizarMeusServicosUI
 from templates.confirmarservicoui import ConfirmarServicoUI
+from templates.registraratendimentoui import RegistrarAtendimentoUI
+from templates.pagaratendimentoui import PagarAtendimentoUI
 from service import Service
 import streamlit as st
 
@@ -29,17 +31,19 @@ class IndexUI:
 
     @staticmethod
     def menu_cliente():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Agendar Serviço", "Meus Serviços"], key="menu_cliente")
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Agendar Serviço", "Meus Serviços", "Pagar Atendimento"], key="menu_cliente")
         if op == "Meus Dados": 
             PerfilClienteUI.main()
         elif op == "Agendar Serviço": 
             AgendarServicoUI.main()
         elif op == "Meus Serviços": 
             VisualizarMeusServicosUI.main()
+        elif op == "Pagar Atendimento":
+            PagarAtendimentoUI.main()
 
     @staticmethod
     def menu_profissional():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Abrir Minha Agenda", "Minha Agenda", "Confirmar Serviço"], key="menu_profissional")
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Abrir Minha Agenda", "Minha Agenda", "Confirmar Serviço", "Registrar Atendimento"], key="menu_profissional")
         if op == "Meus Dados": 
             PerfilProfissionalUI.main()
         elif op == "Abrir Minha Agenda":
@@ -48,6 +52,8 @@ class IndexUI:
             VisualizarMinhaAgendaUI.main()
         elif op == "Confirmar Serviço":
             ConfirmarServicoUI.main()
+        elif op == "Registrar Atendimento":
+            RegistrarAtendimentoUI.main()
 
     @staticmethod
     def menu_admin():
