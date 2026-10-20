@@ -3,6 +3,14 @@
     "id": 1,
     "nome": "roger",
     "email": "roger",
-    "especialidade": "aura"
+    "especialidade": "aura",
+    "senha": "1234"
+  },
+  {
+    "id": 2,
+    "nome": "otavio",
+    "email": "otavio",
+    "especialidade": "pisos",
+    "senha": "42"
   }
 ]

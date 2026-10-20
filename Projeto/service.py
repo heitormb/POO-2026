@@ -135,6 +135,30 @@ class Service:
         return r
 
     @staticmethod
+    def horario_listar_profissional(id_profissional):
+        r = []
+        for h in Service.horario_listar():
+            if h.get_id_profissional() == id_profissional:
+                r.append(h)
+        return r
+
+    @staticmethod
+    def horario_listar_cliente(id_cliente):
+        r = []
+        for h in Service.horario_listar():
+            if h.get_id_cliente() == id_cliente:
+                r.append(h)
+        return r
+
+    @staticmethod
+    def horario_listar_pendentes(id_profissional):
+        r = []
+        for h in Service.horario_listar():
+            if h.get_id_profissional() == id_profissional and h.get_confirmado() == False and h.get_id_cliente() not in [None, 0]:
+                r.append(h)
+        return r
+
+    @staticmethod
     def horario_atualizar(id, data, confirmado, id_cliente, id_servico, id_profissional):
         c = Horario(id, data)
         c.set_confirmado(confirmado)

@@ -8,7 +8,12 @@ from templates.abrircontaui import AbrirContaUI
 from templates.loginui import LoginUI
 from templates.perfilclienteui import PerfilClienteUI
 from templates.perfilprofissionalui import PerfilProfissionalUI
+from templates.perfiladminui import PerfilAdminUI
 from templates.agendarservicoui import AgendarServicoUI
+from templates.abrirminhaagendaui import AbrirMinhaAgendaUI
+from templates.visualizarminhaagendaui import VisualizarMinhaAgendaUI
+from templates.visualizarmeusservicosui import VisualizarMeusServicosUI
+from templates.confirmarservicoui import ConfirmarServicoUI
 from service import Service
 import streamlit as st
 
@@ -24,26 +29,36 @@ class IndexUI:
 
     @staticmethod
     def menu_cliente():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Agendar Serviço"], key="menu_cliente")
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Agendar Serviço", "Meus Serviços"], key="menu_cliente")
         if op == "Meus Dados": 
             PerfilClienteUI.main()
         elif op == "Agendar Serviço": 
             AgendarServicoUI.main()
+        elif op == "Meus Serviços": 
+            VisualizarMeusServicosUI.main()
 
     @staticmethod
     def menu_profissional():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados"], key="menu_profissional")
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Abrir Minha Agenda", "Minha Agenda", "Confirmar Serviço"], key="menu_profissional")
         if op == "Meus Dados": 
             PerfilProfissionalUI.main()
+        elif op == "Abrir Minha Agenda":
+            AbrirMinhaAgendaUI.main()
+        elif op == "Minha Agenda":
+            VisualizarMinhaAgendaUI.main()
+        elif op == "Confirmar Serviço":
+            ConfirmarServicoUI.main()
 
     @staticmethod
     def menu_admin():
         op = st.sidebar.selectbox(
             "Menu", 
-            ["Clientes", "Serviços", "Horários", "Profissionais", "Atendimentos", "Convênios"], 
+            ["Meus Dados", "Clientes", "Serviços", "Horários", "Profissionais", "Atendimentos", "Convênios"], 
             key="menu_admin"
         )
-        if op == "Clientes": 
+        if op == "Meus Dados":
+            PerfilAdminUI.main()
+        elif op == "Clientes": 
             ManterClienteUI.main()
         elif op == "Serviços": 
             ManterServicoUI.main()
