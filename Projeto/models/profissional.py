@@ -6,8 +6,8 @@ class Profissional:
         self.set_especialidade(especialidade)
     
     def set_id(self, id):
-        if id < 0: raise ValueError("Id deve ser positivo")
-        self.__id = id
+        if int(id) < 0: raise ValueError("Id deve ser positivo")
+        self.__id = int(id)
     def set_nome(self, nome):
         if nome == "": raise ValueError("Nome deve ser informado")
         self.__nome = nome

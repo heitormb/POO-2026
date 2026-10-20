@@ -5,14 +5,14 @@ class Servico:
         self.set_valor(valor)
 
     def set_id(self, id):
-        if id < 0: raise ValueError("Id deve ser positivo")
-        self.__id = id
+        if int(id) < 0: raise ValueError("Id deve ser positivo")
+        self.__id = int(id)
     def set_descricao(self, descricao):
         if descricao == "": raise ValueError("Descrição deve ser informada")
         self.__descricao = descricao
     def set_valor(self, valor):
-        if valor < 0: raise ValueError("Valor deve ser positivo")
-        self.__valor = valor
+        if float(valor) < 0: raise ValueError("Valor deve ser positivo")
+        self.__valor = float(valor)
 
     def get_id(self): return self.__id
     def get_descricao(self): return self.__descricao

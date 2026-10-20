@@ -1,8 +1,6 @@
 from datetime import datetime
 
-
 class Atendimento:
-
   def __init__(
       self,
       id,
