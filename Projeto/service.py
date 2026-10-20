@@ -51,6 +51,37 @@ class Service:
         return None
 
     @staticmethod
+    def profissional_inserir(nome, email, especialidade, senha):
+        obj = Profissional(0, nome, email, especialidade, senha)
+        ProfissionalDAO().inserir(obj)
+        
+    @staticmethod
+    def profissional_listar():
+        r = ProfissionalDAO().listar()
+        r.sort(key = lambda obj : obj.get_nome().casefold())
+        return r
+        
+    @staticmethod
+    def profissional_listar_id(id):
+        return ProfissionalDAO().listar_id(id)
+        
+    @staticmethod
+    def profissional_atualizar(id, nome, email, especialidade, senha):
+        obj = Profissional(id, nome, email, especialidade, senha)
+        ProfissionalDAO().atualizar(obj)
+        
+    @staticmethod
+    def profissional_excluir(id):
+        ProfissionalDAO().excluir(id)
+
+    @staticmethod
+    def profissional_autenticar(email, senha):
+        for p in Service.profissional_listar():
+            if p.get_email() == email and p.get_senha() == senha:
+                return {"id": p.get_id(), "nome": p.get_nome()}
+        return None
+
+    @staticmethod
     def servico_inserir(descricao, valor):
         obj = Servico(0, descricao, valor)
         ServicoDAO().inserir(obj)
@@ -115,30 +146,6 @@ class Service:
     @staticmethod
     def horario_excluir(id):
         HorarioDAO().excluir(id)
-
-    @staticmethod
-    def profissional_inserir(nome, email, especialidade):
-        obj = Profissional(0, nome, email, especialidade)
-        ProfissionalDAO().inserir(obj)
-        
-    @staticmethod
-    def profissional_listar():
-        r = ProfissionalDAO().listar()
-        r.sort(key = lambda obj : obj.get_nome().casefold())
-        return r
-        
-    @staticmethod
-    def profissional_listar_id(id):
-        return ProfissionalDAO().listar_id(id)
-        
-    @staticmethod
-    def profissional_atualizar(id, nome, email, especialidade):
-        obj = Profissional(id, nome, email, especialidade)
-        ProfissionalDAO().atualizar(obj)
-        
-    @staticmethod
-    def profissional_excluir(id):
-        ProfissionalDAO().excluir(id)
 
     @staticmethod
     def atendimento_inserir(data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario):

@@ -7,6 +7,7 @@ from templates.manterconvenioui import ManterConvenioUI
 from templates.abrircontaui import AbrirContaUI
 from templates.loginui import LoginUI
 from templates.perfilclienteui import PerfilClienteUI
+from templates.perfilprofissionalui import PerfilProfissionalUI
 from templates.agendarservicoui import AgendarServicoUI
 from service import Service
 import streamlit as st
@@ -28,6 +29,12 @@ class IndexUI:
             PerfilClienteUI.main()
         elif op == "Agendar Serviço": 
             AgendarServicoUI.main()
+
+    @staticmethod
+    def menu_profissional():
+        op = st.sidebar.selectbox("Menu", ["Meus Dados"], key="menu_profissional")
+        if op == "Meus Dados": 
+            PerfilProfissionalUI.main()
 
     @staticmethod
     def menu_admin():
@@ -54,6 +61,8 @@ class IndexUI:
         if st.sidebar.button("Sair", key="btn_sair_sistema"):
             del st.session_state["usuario_id"]
             del st.session_state["usuario_nome"]
+            if "usuario_tipo" in st.session_state:
+                del st.session_state["usuario_tipo"]
             st.rerun()
 
     @staticmethod
@@ -66,7 +75,11 @@ class IndexUI:
             if admin: 
                 IndexUI.menu_admin()
             else: 
-                IndexUI.menu_cliente()
+                tipo = st.session_state.get("usuario_tipo", "cliente")
+                if tipo == "profissional":
+                    IndexUI.menu_profissional()
+                else:
+                    IndexUI.menu_cliente()
             IndexUI.sair_do_sistema()
 
     @staticmethod
