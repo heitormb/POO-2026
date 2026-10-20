@@ -7,6 +7,7 @@ from templates.manterconvenioui import ManterConvenioUI
 from templates.abrircontaui import AbrirContaUI
 from templates.loginui import LoginUI
 from templates.perfilclienteui import PerfilClienteUI
+from templates.agendarservicoui import AgendarServicoUI
 from service import Service
 import streamlit as st
 
@@ -22,9 +23,11 @@ class IndexUI:
 
     @staticmethod
     def menu_cliente():
-        op = st.sidebar.selectbox("Menu", ["Meus Dados"], key="menu_cliente")
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Agendar Serviço"], key="menu_cliente")
         if op == "Meus Dados": 
             PerfilClienteUI.main()
+        elif op == "Agendar Serviço": 
+            AgendarServicoUI.main()
 
     @staticmethod
     def menu_admin():
