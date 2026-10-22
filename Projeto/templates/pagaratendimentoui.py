@@ -25,7 +25,7 @@ class PagarAtendimentoUI:
                     atendimento.get_prescricao(),
                     atendimento.get_id_horario()
                 )
-                # Atualizando especificamente o status de pagamento
+
                 atendimento.set_pago(True)
                 Service.atendimento_atualizar(
                     atendimento.get_id(),
@@ -36,7 +36,7 @@ class PagarAtendimentoUI:
                     atendimento.get_prescricao(),
                     atendimento.get_id_horario()
                 )
-                # Opcional: atualizar via dao direto se preferir, mas os setters cobrem. Vamos garantir salvando o objeto atualizado.
+
                 st.success("Pagamento efetuado com sucesso! Atendimento finalizado.")
                 time.sleep(2)
                 st.rerun()

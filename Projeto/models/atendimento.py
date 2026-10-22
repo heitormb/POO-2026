@@ -1,18 +1,7 @@
 from datetime import datetime
 
 class Atendimento:
-  def __init__(
-      self,
-      id,
-      data,
-      queixa_principal,
-      historico_saude,
-      avaliacao,
-      prescricao,
-      id_horario,
-      total=0.0,
-      pago=False,
-  ):
+  def __init__(self, id, data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario,total=0.0, pago=False,):
     self.set_id(id)
     self.set_data(data)
     self.set_queixa_principal(queixa_principal)
@@ -81,28 +70,8 @@ class Atendimento:
     return f"{self.__id} - {self.__data.strftime('%d/%m/%Y %H:%M')} - Queixa: {self.__queixa_principal} - Pago: {self.__pago}"
 
   def to_json(self):
-    return {
-        "id": self.__id,
-        "data": self.__data.strftime("%d/%m/%Y %H:%M"),
-        "queixa_principal": self.__queixa_principal,
-        "historico_saude": self.__historico_saude,
-        "avaliacao": self.__avaliacao,
-        "prescricao": self.__prescricao,
-        "id_horario": self.__id_horario,
-        "total": self.__total,
-        "pago": self.__pago,
-    }
+    return { "id": self.__id, "data": self.__data.strftime("%d/%m/%Y %H:%M"), "queixa_principal": self.__queixa_principal, "historico_saude": self.__historico_saude, "avaliacao": self.__avaliacao, "prescricao": self.__prescricao, "id_horario": self.__id_horario, "total": self.__total,"pago": self.__pago,}
 
   @staticmethod
   def from_json(dic):
-    return Atendimento(
-        dic["id"],
-        datetime.strptime(dic["data"], "%d/%m/%Y %H:%M"),
-        dic["queixa_principal"],
-        dic["historico_saude"],
-        dic["avaliacao"],
-        dic["prescricao"],
-        dic["id_horario"],
-        dic.get("total", 0.0),
-        dic.get("pago", False),
-    )
+    return Atendimento( dic["id"], datetime.strptime(dic["data"], "%d/%m/%Y %H:%M"), dic["queixa_principal"], dic["historico_saude"], dic["avaliacao"], dic["prescricao"], dic["id_horario"], dic.get("total", 0.0), dic.get("pago", False),)

@@ -7,7 +7,7 @@ class RegistrarAtendimentoUI:
     @staticmethod
     def main():
         st.header("Registrar Atendimento")
-        # Lista horários confirmados do profissional logado que ainda não possuem atendimento
+
         horarios = [h for h in Service.horario_listar_profissional(st.session_state["usuario_id"]) if h.get_confirmado() == True]
         
         if len(horarios) == 0:
