@@ -17,6 +17,8 @@ from templates.confirmarservicoui import ConfirmarServicoUI
 from templates.registraratendimentoui import RegistrarAtendimentoUI
 from templates.pagaratendimentoui import PagarAtendimentoUI
 from templates.totalizaratendimentosui import TotalizarAtendimentosUI
+from templates.listarhorariosconfirmadoshojeui import ListarHorariosConfirmadosHojeUI
+from templates.listaragendaprofissionalui import ListarAgendaProfissionalUI
 from service import Service
 import streamlit as st
 
@@ -58,11 +60,7 @@ class IndexUI:
 
     @staticmethod
     def menu_admin():
-        op = st.sidebar.selectbox(
-            "Menu", 
-            ["Meus Dados", "Clientes", "Serviços", "Horários", "Profissionais", "Atendimentos", "Convênios", "Totalizar Atendimentos"], 
-            key="menu_admin"
-        )
+        op = st.sidebar.selectbox("Menu", ["Meus Dados", "Clientes", "Serviços", "Horários", "Profissionais", "Atendimentos", "Convênios", "Totalizar Atendimentos", "Horários Confirmados Hoje", "Agenda do Profissional"], key="menu_admin")
         if op == "Meus Dados":
             PerfilAdminUI.main()
         elif op == "Clientes": 
@@ -79,6 +77,10 @@ class IndexUI:
             ManterConvenioUI.main()
         elif op == "Totalizar Atendimentos":
             TotalizarAtendimentosUI.main()
+        elif op == "Horários Confirmados Hoje":
+            ListarHorariosConfirmadosHojeUI.main()
+        elif op == "Agenda do Profissional":
+            ListarAgendaProfissionalUI.main()
 
     @staticmethod
     def sair_do_sistema():

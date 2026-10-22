@@ -172,6 +172,25 @@ class Service:
         HorarioDAO().excluir(id)
 
     @staticmethod
+    def horario_listar_confirmados_hoje():
+        r = []
+        hoje = datetime.now().date()
+        for h in Service.horario_listar():
+            if h.get_data().date() == hoje and h.get_confirmado() == True and h.get_id_cliente() not in [None, 0]:
+                r.append(h)
+        r.sort(key = lambda h : h.get_data())
+        return r
+
+    @staticmethod
+    def horario_listar_por_profissional(id_profissional):
+        r = []
+        for h in Service.horario_listar():
+            if h.get_id_profissional() == id_profissional:
+                r.append(h)
+        r.sort(key = lambda h : h.get_data())
+        return r
+
+    @staticmethod
     def atendimento_inserir(data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario):
       a = Atendimento(0, data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario)
       AtendimentoDAO().inserir(a)
