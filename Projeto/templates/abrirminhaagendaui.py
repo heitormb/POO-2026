@@ -7,27 +7,30 @@ class AbrirMinhaAgendaUI:
     @staticmethod
     def main():
         st.header("Abrir Minha Agenda")
-        data_str = st.text_input("Informe a data no formato dd/mm/aaaa", datetime.now().strftime("%d/%m/%Y"), key="abrir_agenda_data")
-        hora_inicio_str = st.text_input("Informe o horário inicial no formato HH:MM", "09:00", key="abrir_agenda_inicio")
-        hora_fim_str = st.text_input("Informe o horário final no formato HH:MM", "12:00", key="abrir_agenda_fim")
+        data_str = st.text_input("Informe a data no formato dd/mm/aaaa", key="abrir_agenda_data")
+        hora_ini_str = st.text_input("Informe o horário inicial no formato HH:MM", key="abrir_agenda_ini")
+        hora_fim_str = st.text_input("Informe o horário final no formato HH:MM", key="abrir_agenda_fim")
         intervalo = st.number_input("Informe o intervalo entre os horários (min)", min_value=1, value=30, key="abrir_agenda_intervalo")
-        
+
         if st.button("Abrir Agenda", key="btn_abrir_agenda"):
             try:
                 data_base = datetime.strptime(data_str, "%d/%m/%Y").date()
-                h_inicio = datetime.strptime(hora_inicio_str, "%H:%M").time()
-                h_fim = datetime.strptime(hora_fim_str, "%H:%M").time()
-                
-                dt_atual = datetime.combine(data_base, h_inicio)
-                dt_fim = datetime.combine(data_base, h_fim)
-                delta = timedelta(minutes=int(intervalo))
-                
+                hora_ini = datetime.strptime(hora_ini_str, "%H:%M").time()
+                hora_fim = datetime.strptime(hora_fim_str, "%H:%M").time()
+
+                dt_atual = datetime.combine(data_base, hora_ini)
+                dt_fim = datetime.combine(data_base, hora_fim)
+
+                id_prof = st.session_state["usuario_id"]
+
                 while dt_atual <= dt_fim:
-                    Service.horario_inserir(dt_atual, False, 0, 0, st.session_state["usuario_id"])
-                    dt_atual += delta
-                
-                st.success("Agenda aberta com sucesso")
+                    Service.horario_inserir(dt_atual, False, None, None, id_prof)
+                    dt_atual += timedelta(minutes=int(intervalo))
+
+                st.success("Agenda aberta com sucesso!")
                 time.sleep(2)
                 st.rerun()
+            except ValueError as erro:
+                st.error(f"Erro: {erro}")
             except Exception as e:
-                st.error(f"Erro ao abrir agenda: {e}")
+                st.error(f"Erro nos dados informados: {e}")
